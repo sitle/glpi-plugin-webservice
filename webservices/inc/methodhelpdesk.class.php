@@ -354,7 +354,8 @@ class PluginWebservicesMethodHelpdesk extends PluginWebservicesMethodCommon {
                       'category'                => 'integer,optional',
                       'user'                    => 'integer,optional',
                       'requester'               => 'integer,optional',
-                      'observer'                => 'integer,optional',
+		      'observer'                => 'integer,optional',
+		      'group_assign'            => 'integer,optional',
                       'group'                   => 'integer,optional',
                       'date'                    => 'datetime,optional',
                       'type'                    => 'integer,optional',
@@ -493,6 +494,34 @@ class PluginWebservicesMethodHelpdesk extends PluginWebservicesMethodCommon {
          }
       }
 
+	// group (assign) : optionnal,  default = none
+        if (!isset($params['group_assign'])) {
+            $data['_groups_id_assign'] = 0;
+        } else {
+            if (!is_numeric($params['group_assign'])) {
+                return self::Error($protocol, WEBSERVICES_ERROR_BADPARAMETER, '', 'group_assign');
+            }
+            if (Session::haveRight('assign_ticket', '1')) {
+                $data['_groups_id_assign'] = $params['group_assign'];
+            } else {
+                return self::Error($protocol, WEBSERVICES_ERROR_NOTALLOWED);
+            }
+        }
+
+	// group (assign) : optionnal,  default = none
+        if (!isset($params['group_assign'])) {
+            $data['_groups_id_assign'] = 0;
+        } else {
+            if (!is_numeric($params['group_assign'])) {
+                return self::Error($protocol, WEBSERVICES_ERROR_BADPARAMETER, '', 'group_assign');
+            }
+            if (Session::haveRight('assign_ticket', '1')) {
+                $data['_groups_id_assign'] = $params['group_assign'];
+            } else {
+                return self::Error($protocol, WEBSERVICES_ERROR_NOTALLOWED);
+            }
+        }
+      
       // group (author) : optionnal,  default = none
       if (!isset($params['group'])) {
          $data['_groups_id_requester'] = 0;
